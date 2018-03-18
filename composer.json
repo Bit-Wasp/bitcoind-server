@@ -1,0 +1,21 @@
+{
+  "name": "bitwasp/bitcoind",
+  "homepage": "https://github.com/bit-wasp/bitcoind",
+  "require": {
+    "bitwasp/buffertools": "^0.5.0",
+    "nbobtc/bitcoind-php": "v2.0.2",
+    "matomo/ini": "^2.0",
+    "phpunit/phpunit": "^6.0",
+    "squizlabs/php_codesniffer": "^3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "BitWasp\\Bitcoind\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BitWasp\\Test\\Bitcoind\\": "test/unit/"
+    }
+  }
+}
