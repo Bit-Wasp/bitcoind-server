@@ -97,5 +97,4 @@ checks:
             verify_interface_like_constraints: true
             verify_documented_constraints: true
             verify_parent_constraints: true
-    javascript: true
 
