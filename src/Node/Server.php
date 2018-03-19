@@ -111,11 +111,14 @@ class Server
 
         $this->config = $this->getConfig($loader);
 
-        $res = 0;
-        $out = '';
+        $res = null;
+        $out = [];
         exec($this->options->getStartupCommand(), $out, $res);
 
         if (0 !== $res) {
+            if (getenv('BITCOINDSERVER_DEBUG_START')) {
+                echo file_get_contents($this->options->getAbsoluteLogPath($this->config));
+            }
             throw new \RuntimeException("Failed to start bitcoind: {$this->options->getDataDir()}\n");
         }
 
@@ -130,7 +133,7 @@ class Server
                 }
                 usleep(50000);
             }
-        } while($tries-- > 0 && !$this->isRunning());
+        } while ($tries-- > 0 && !$this->isRunning());
     }
 
     /**
