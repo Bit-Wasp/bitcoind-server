@@ -3,6 +3,7 @@
   "description": "A helper library for spawning bitcoind regtest nodes for unit tests",
   "keywords": ["unit test", "bitcoin", "daemon", "regtest"],
   "homepage": "https://github.com/bit-wasp/bitcoind-server",
+  "license": "MIT",
   "require": {
     "bitwasp/buffertools": "^0.5.0",
     "nbobtc/bitcoind-php": "v2.0.2",
