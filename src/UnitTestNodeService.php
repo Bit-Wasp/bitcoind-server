@@ -124,8 +124,12 @@ class UnitTestNodeService
      * @throws UnitTestException
      * @throws \Exception
      */
-    public function create(): Server
+    public function create(bool $wait = null): Server
     {
+        if ($wait === null) {
+            $wait = true;
+        }
+
         $testId = count($this->nodeDirs);
         $dataDir = $this->createNextDataDir($testId);
         $config = $this->createRandomConfig($testId);
@@ -133,8 +137,10 @@ class UnitTestNodeService
 
         $node = $this->service->createNewNode($options, $config, $this->writer);
         $node->start($this->reader);
-        $node->waitForStartup();
-        $node->waitForRpc();
+        if ($wait) {
+            $node->waitForStartup();
+            $node->waitForRpc();
+        }
 
         $this->servers[] = $node;
 
