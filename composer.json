@@ -5,7 +5,6 @@
   "homepage": "https://github.com/bit-wasp/bitcoind-server",
   "license": "MIT",
   "require": {
-    "bitwasp/buffertools": "^0.5.0",
     "nbobtc/bitcoind-php": "^2.0.2",
     "matomo/ini": "^2.0"
   },
