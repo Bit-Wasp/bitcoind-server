@@ -8,7 +8,7 @@ php:
 
 env:
     # The default env behaviour: phpunit, no coverage, no style checks
-  - PHPUNIT=true BITCOIN_VERSION="0.16.0"
+  - PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.2"
 
 cache:
   directories:
@@ -20,12 +20,16 @@ matrix:
   exclude:
       # Disable phpunit test on 7.0, reenable with COVERAGE
     - php: 7.0
-      env: PHPUNIT=true
+      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.2"
 
   include:
       # This reenables php7.0/phpunit test with COVERAGE
     - php: 7.0
       env: PHPUNIT=true BITCOIN_VERSION="0.16.0" COVERAGE=true CODESTYLE=true EXAMPLES=true
+
+      # 2.1.x
+    - php: 7.2
+      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.1.0"
 
 sudo: false
 
@@ -46,6 +50,7 @@ install:
 
 before_script:
     - travis_retry composer install --prefer-source
+    - composer require nbobtc/bitcoind-php ${NBOBTC_VERSION}
     - if [ "${COVERAGE}" != "true" ] && [ "${TRAVIS_PHP_VERSION}" != "nightly" ]; then phpenv config-rm xdebug.ini && echo "xdebug disabled"; fi
 
 script:
