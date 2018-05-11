@@ -10,6 +10,7 @@ use BitWasp\Bitcoind\Exception\ServerException;
 use BitWasp\Bitcoind\HttpDriver\CurlDriver;
 use Nbobtc\Command\Command;
 use Nbobtc\Http\Client;
+use Nbobtc\Http\Driver\DriverInterface;
 
 class Server
 {
@@ -141,14 +142,14 @@ class Server
      * @throws ServerException
      * @throws \BitWasp\Bitcoind\Exception\BitcoindException
      */
-    public function getClient(): Client
+    public function getClient(DriverInterface $driver = null): Client
     {
         if (!$this->isRunning()) {
             throw new ServerException("Cannot get Client for non-running server");
         }
 
         $client = new Client($this->config->getRpcDsn());
-        $client->withDriver(new CurlDriver());
+        $client->withDriver($driver ?: new CurlDriver());
         return $client;
     }
 
