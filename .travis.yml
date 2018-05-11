@@ -8,7 +8,7 @@ php:
 
 env:
     # The default env behaviour: phpunit, no coverage, no style checks
-  - PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.0"
+  - PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.2"
 
 cache:
   directories:
@@ -20,24 +20,17 @@ matrix:
   exclude:
       # Disable phpunit test on 7.0, reenable with COVERAGE
     - php: 7.0
-      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.0"
+      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.2"
 
   include:
       # This reenables php7.0/phpunit test with COVERAGE
     - php: 7.0
       env: PHPUNIT=true BITCOIN_VERSION="0.16.0" COVERAGE=true CODESTYLE=true EXAMPLES=true
 
-      # 2.0.1
-    - php: 7.2
-      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.1"
-
-      # 2.0.2
-    - php: 7.2
-      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.0.2"
-
       # 2.1.x
     - php: 7.2
-      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.1.x"
+      env: PHPUNIT=true BITCOIN_VERSION="0.16.0" NBOBTC_VERSION="2.1.0"
+
 sudo: false
 
 install:
