@@ -48,12 +48,18 @@ class UnitTestNodeService
      */
     private $servers = [];
 
+    /**
+     * @var DataDirGeneratorInterface
+     */
+    private $dataDirGenerator;
+
     private $cleanupWhenFinished = true;
 
-    public function __construct(string $bitcoindPath, NodeService $nodeService)
+    public function __construct(string $bitcoindPath, NodeService $nodeService, DataDirGeneratorInterface $dataDirGenerator = null)
     {
         $this->tmpDir = sys_get_temp_dir();
         $this->bitcoindPath = $bitcoindPath;
+        $this->dataDirGenerator = $dataDirGenerator ?: new IncrementalDataDirGenerator($this->tmpDir);
         $this->service = $nodeService;
         $this->writer = new Config\FilesystemWriter();
         $this->reader = new Config\FilesystemLoader(new IniReader());
@@ -63,17 +69,6 @@ class UnitTestNodeService
     {
         $this->cleanupWhenFinished = $doCleanup;
         return $this;
-    }
-
-    /**
-     * @param int $dirId
-     * @return string
-     */
-    protected function createNextDataDir(int $dirId): string
-    {
-        $this->nodeDirs[] = $dir = $this->tmpDir . "/unittest-node-{$dirId}";
-
-        return $dir;
     }
 
     /**
@@ -107,8 +102,9 @@ class UnitTestNodeService
     {
         $this->findAvailablePort($testId);
         $password = preg_replace("/[^A-Za-z0-9 ]/", '', base64_encode(random_bytes(16)));
+        $nonce = preg_replace("/[^A-Za-z0-9 ]/", '', base64_encode(random_bytes(4)));
         return new Config\Config([
-            'rpcuser' => "user-{$testId}",
+            'rpcuser' => "user-{$testId}-{$nonce}",
             'rpcpassword' => $password,
             'rpcallowip' => '127.0.0.1',
             'regtest' => '1',
@@ -131,7 +127,7 @@ class UnitTestNodeService
         }
 
         $testId = count($this->nodeDirs);
-        $dataDir = $this->createNextDataDir($testId);
+        $dataDir = $this->dataDirGenerator->createNextDir();
         $config = $this->createRandomConfig($testId);
         $options = new NodeOptions($this->bitcoindPath, $dataDir);
 
@@ -162,6 +158,12 @@ class UnitTestNodeService
                 if (file_exists($dataDir)) {
                     File::recursiveDelete($dataDir);
                 }
+            }
+        }
+
+        foreach ($this->dataDirGenerator->getDirs() as $dir) {
+            if (is_dir($dir)) {
+                File::recursiveDelete($dataDir);
             }
         }
     }
